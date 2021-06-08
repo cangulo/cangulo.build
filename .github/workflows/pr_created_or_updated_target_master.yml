@@ -1,0 +1,58 @@
+# name: PR Created or Updated
+
+# on:
+#   pull_request:
+#     branches:
+#       - main
+
+# jobs:
+#   process-update-in-pr:
+#     name: Process Update in a PR
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v2
+#       - name: Construct GetCommitsActions Request
+#         id: get-commits-actions
+#         run: |
+#           GET_COMMITS_ACTIONS_REQUEST=$(cat <<-END
+#             {
+#                 \"requestModel\":\"GetCommitsActions\",
+#                 \"originator\":\"${{ github.actor }}-${{ github.event_name }}\",
+#                 \"pullRequestNumber\":${{ github.event.number }},
+#                 \"repositoryId\":${{ github.event.repository.id }}
+#             }
+#           END
+#           )
+#           echo ::set-output name=REQUEST::$(echo $GET_COMMITS_ACTIONS_REQUEST)
+#           echo "$GET_COMMITS_ACTIONS_REQUEST"
+#       - name: GetCommitsActions Nuke
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#           OUTPUT_FILE_PATH: "./artifacs"
+#         run: |
+#           chmod +x ./build.sh
+#           ./build.sh --root . --target GenericRequestHandler --requestJSON "${{ steps.get-commits-actions.outputs.REQUEST }}" --verbosity verbose
+#       - name: GetCommitsActions Response
+#         run: cat ./artifacs/GetCommitsActions_RESPONSE.json
+#       - name: Construct ProcessCommitActions Request
+#         id: process-commits-actions
+#         run: |
+#           PROCESS_COMMITS_ACTIONS_REQUEST=$(cat <<-END
+#             {
+#                 \"requestModel\":\"ProcessCommitActions\",
+#                 \"originator\":\"${{ github.actor }}-${{ github.event_name }}\",
+#                 \"commitActions\": $(jq . ./artifacs/GetCommitsActions_RESPONSE.json -c | jq -aR) 
+#             }
+#           END
+#           )
+#           echo ::set-output name=REQUEST::$(echo $PROCESS_COMMITS_ACTIONS_REQUEST)
+#           echo "$PROCESS_COMMITS_ACTIONS_REQUEST"
+#       - name: ProcessCommitActions Nuke
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#           OUTPUT_FILE_PATH: "./artifacs"
+#         run: |
+#           chmod +x ./build.sh
+#           ./build.sh --root . --target GenericRequestHandler --requestJSON "${{ steps.process-commits-actions.outputs.REQUEST }}" --verbosity verbose
+#       - name: ProcessCommitActions Response
+#         run: cat ./artifacs/ProcessCommitActions_RESPONSE.json

@@ -1,0 +1,73 @@
+name: Create Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      releaseNumber:
+        description: 'The Release number X.Y.Z'
+        required: true
+        default: ''
+
+jobs:
+  process-update-in-pr:
+    name: Release Patch
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Publish cangulo.build for GH Action
+        run: dotnet publish ./cangulo.build/cangulo.build.csproj  -o ./artifacts/cangulo.build/ -r linux-x64 --self-contained
+      - name: zip cangulo.build
+        run: |
+          mkdir releaseFiles
+          zip -j -r ./releaseFiles/cangulo.build_linux64.zip ./artifacts/cangulo.build/
+      - name: Construct CreateRelease Request
+        id: create-release-request
+        run: |
+          CREATE_RELEASE_REQUEST=$(cat <<-END
+            {
+                \"requestModel\": \"CreateRelease\",
+                \"originator\": \"${{ github.actor }}-${{ github.event_name }}\",
+                \"repositoryId\": ${{ github.event.repository.id }},
+                \"tag\": \"${{ github.event.inputs.releaseNumber }}\",
+                \"title\": \"${{ github.event.inputs.releaseNumber }}\",
+                \"releaseNotesFilePath\":\"./ReleaseNotes.md\",
+                \"releaseAssetsFolder\":\"./releaseFiles\"
+            }
+          END
+          )
+          echo ::set-output name=REQUEST::$(echo $CREATE_RELEASE_REQUEST)
+          echo "$CREATE_RELEASE_REQUEST"
+      - name: CreateRelease Nuke
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          OUTPUT_FILE_PATH: "./artifacs"
+        run: |
+          chmod +x ./build.sh
+          ./build.sh --root . --target GenericRequestHandler --requestJSON "${{ steps.create-release-request.outputs.REQUEST }}" --verbosity verbose
+      # # - name: CreateRelease Response
+      # #   run: cat ./artifacs/GetCommitsActions_RESPONSE.json
+      # # - name: Construct ProcessCommitActions Request
+      # #   id: process-commits-actions
+      # #   run: |
+      # #     PROCESS_COMMITS_ACTIONS_REQUEST=$(cat <<-END
+      # #       {
+      # #           \"requestModel\":\"ProcessCommitActions\",
+      # #           \"originator\":\"${{ github.actor }}-${{ github.event_name }}\",
+      # #           \"commitActions\": $(jq . ./artifacs/GetCommitsActions_RESPONSE.json -c | jq -aR) 
+      # #       }
+      # #     END
+      # #     )
+      # #     echo ::set-output name=REQUEST::$(echo $PROCESS_COMMITS_ACTIONS_REQUEST)
+      # #     echo "$PROCESS_COMMITS_ACTIONS_REQUEST"
+      # # - name: ProcessCommitActions Nuke
+      # #   env:
+      # #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # #     OUTPUT_FILE_PATH: "./artifacs"
+      # #   run: |
+      # #     chmod +x ./build.sh
+      # #     ./build.sh --root . --target GenericRequestHandler --requestJSON "${{ steps.process-commits-actions.outputs.REQUEST }}" --verbosity verbose
+      # # - name: ProcessCommitActions Response
+      # #   run: cat ./artifacs/ProcessCommitActions_RESPONSE.json
