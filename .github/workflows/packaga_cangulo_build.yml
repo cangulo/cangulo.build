@@ -18,10 +18,10 @@ jobs:
           cd ./releases
           zip -r ./cangulo.build.zip ./cangulo.build
           cd ..
-      - uses: actions/checkout@v2
-      - run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
+          ls
+          ls ./releases
           git add ./releases/cangulo.build.zip
           git commit -m "updated releases/cangulo.build.zip"
           git push
