@@ -60,6 +60,7 @@ namespace cangulo.build.Application.RequestHandlers
 
                 if (request.CommentToPrRequest != null)
                 {
+                    _nukeLogger.Info("Listing nuget packages pushed in the PR");
                     var githubToken = EnvironmentInfo.GetVariable<string>(EnvVar.GITHUB_TOKEN.ToString());
 
                     var client = new GitHubClient(new ProductHeaderValue(request.Originator));

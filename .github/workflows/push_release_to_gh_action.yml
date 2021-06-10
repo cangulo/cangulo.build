@@ -1,0 +1,20 @@
+name: Push Output cangulo.build to its GH Action
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build_release:
+    runs-on: ubuntu-latest
+    name: Publish cangulo.build
+    steps:
+      - name: Download cangulo.build
+        run: dotnet publish ./cangulo.build/cangulo.build.csproj  -o ./artifacts/ -r linux-x64 --self-contained
+  push_release:
+    needs: build_release
+    name: Push artifact to the GH action repo
+    steps:
+      - name: Push artifact to the GH action repo
+        run: ls
