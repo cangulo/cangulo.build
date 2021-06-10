@@ -15,13 +15,11 @@ jobs:
         run: dotnet publish ./cangulo.build/cangulo.build.csproj  -o ./artifacts/cangulo.build/ -r linux-x64 --self-contained
       - name: zip cangulo.build
         run: |
-          cd ./artifacts
-          zip -r cangulo.build.zip .
-          cd ..
+          zip -r cangulo.build.zip ./artifacts
       - uses: actions/upload-artifact@v2
         with:
           name: cangulo.build
-          path: ./artifacts/cangulo.build/
+          path: cangulo.build.zip
   push_release:
     name: Push artifact to the GH action repo
     runs-on: ubuntu-latest
