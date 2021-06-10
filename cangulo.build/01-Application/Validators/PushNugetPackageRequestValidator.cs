@@ -14,6 +14,9 @@ namespace cangulo.build.Application.Validators
             RuleFor(x => x.TargetNugetRepository)
                 .NotNull()
                 .NotEmpty();
+            RuleFor(x => x.CommentToPrRequest)
+                .SetValidator(new AddCommentsToPRValidator())
+                .When(x => x.CommentToPrRequest != null);
         }
     }
 }

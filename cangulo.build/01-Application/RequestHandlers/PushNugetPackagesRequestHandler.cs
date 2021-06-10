@@ -1,10 +1,13 @@
 ﻿using cangulo.build.Abstractions.Models;
 using cangulo.build.Abstractions.NukeLogger;
 using cangulo.build.Application.Requests;
+using cangulo.build.Application.Requests.Enums;
 using cangulo.build.Extensions;
 using FluentResults;
+using Nuke.Common;
 using Nuke.Common.IO;
 using Nuke.Common.Tools.DotNet;
+using Octokit;
 using System;
 using System.Linq;
 using System.Threading;
@@ -51,7 +54,22 @@ namespace cangulo.build.Application.RequestHandlers
             }
 
             if (nuggets.Any())
-                _nukeLogger.Success($"The next nuget packages have been pushed:\n{string.Join("\n", nuggets.Select(x => x.fileName).ToArray())}");
+            {
+                var msg = $"The next nuget packages have been pushed:\n{string.Join("\n", nuggets.Select(x => x.fileName).ToArray())}";
+                _nukeLogger.Success(msg);
+
+                if (request.CommentToPrRequest != null)
+                {
+                    var githubToken = EnvironmentInfo.GetVariable<string>(EnvVar.GITHUB_TOKEN.ToString());
+
+                    var client = new GitHubClient(new ProductHeaderValue(request.Originator));
+                    client.Credentials = new Credentials(githubToken);
+
+                    var issue = await client.Issue.Get(request.CommentToPrRequest.RepositoryId, request.CommentToPrRequest.PullRequestNumber);
+                    var commentsClient = client.Issue.Comment;
+                    await commentsClient.Create(request.CommentToPrRequest.RepositoryId, request.CommentToPrRequest.PullRequestNumber, msg);
+                }
+            }
             else
                 _nukeLogger.Success("No nuget packages found");
 
