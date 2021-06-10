@@ -38,8 +38,10 @@ jobs:
       - name: List Files
         run: |
           git status
-          git config --global user.email "${{ github.actor }}-${{ github.event_name }}@github.com"
-          git config --global user.name "${{ github.actor }}-${{ github.event_name }}"
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add .
           git add cangulo.build.zip
-          git commit -m "updating cangulo.build.zip"
+          git status
+          git commit -m "generated"
           git push
