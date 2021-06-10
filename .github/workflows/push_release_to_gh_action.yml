@@ -37,5 +37,7 @@ jobs:
           name: cangulo.build
       - name: List Files
         run: |
-          ls -la
           git status
+          git add cangulo.build.zip
+          git commit -m "updating cangulo.build.zip"
+          git push
