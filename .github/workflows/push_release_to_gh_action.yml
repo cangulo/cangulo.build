@@ -10,14 +10,22 @@ jobs:
     name: Publish cangulo.build
     runs-on: ubuntu-latest
     steps:
-      - name: Publish cangulo.build
       - uses: actions/checkout@v2
+      - name: Publish cangulo.build
         run: dotnet publish ./cangulo.build/cangulo.build.csproj  -o ./artifacts/canbulo.build/ -r linux-x64 --self-contained
       # - name: Ziping artifact
       #   run: |
       #     cd ./artifacts
       #     zip -r cangulo.build.zip .
       #     cd ..
+      # - uses: actions/upload-artifact@v2
+      #   with:
+      #     name: cangulo.build
+      #     path: ./artifacts/cangulo.build.zip
+      # - uses: actions/upload-artifact@v2
+      #   with:
+      #     name: cangulo.build
+      #     path: ./artifacts/cangulo.build/
   # push_release:
   #   name: Push artifact to the GH action repo
   #   runs-on: ubuntu-latest
