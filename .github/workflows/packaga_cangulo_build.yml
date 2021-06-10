@@ -1,0 +1,56 @@
+name: Package cangulo.build
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build_release:
+    name: Publish cangulo.build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Publish cangulo.build
+        run: dotnet publish ./cangulo.build/cangulo.build.csproj  -o ./releases/cangulo.build/ -r linux-x64 --self-contained
+      - name: zip cangulo.build
+        run: |
+          cd ./releases
+          zip -r ./cangulo.build.zip ./cangulo.build
+          cd ..
+      - uses: actions/upload-artifact@v2
+        with:
+          name: cangulo.build
+          path: ./releases/cangulo.build.zip
+      - uses: actions/checkout@v2
+      - run: |
+          date > generated.txt
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add .
+          git commit -m "generated"
+          git push
+  # push_release:
+  #   name: Push artifact to the GH action repo
+  #   runs-on: ubuntu-latest
+  #   needs: build_release
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #       with:
+  #         repository: cangulo/cangulo.build-gh-action
+  #         token: ${{ secrets.ALLOWCOMMITPAT }}
+  #     - name: List Files
+  #       run: ls -la
+  #     - uses: actions/download-artifact@v2
+  #       with:
+  #         name: cangulo.build
+  #     - name: List Files
+  #       run: |
+  #         git status
+  #         git config user.name github-actions
+  #         git config user.email github-actions@github.com
+  #         git add .
+  #         git add cangulo.build.zip
+  #         git status
+  #         git commit -m "generated"
+  #         git push
