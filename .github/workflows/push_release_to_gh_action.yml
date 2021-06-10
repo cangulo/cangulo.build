@@ -12,7 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Publish cangulo.build
-        run: dotnet publish ./cangulo.build/cangulo.build.csproj  -o ./artifacts/canbulo.build/ -r linux-x64 --self-contained
+        run: dotnet publish ./cangulo.build/cangulo.build.csproj  -o ./artifacts/cangulo.build/ -r linux-x64 --self-contained
       - uses: actions/upload-artifact@v2
         with:
           name: cangulo.build
