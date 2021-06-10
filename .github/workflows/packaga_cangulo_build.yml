@@ -20,10 +20,6 @@ jobs:
           cd ..
           git config user.name github-actions
           git config user.email github-actions@github.com
-          echo "all"
-          ls
-          echo "gh-actions"
-          ls ./gh-actions
           git add ./gh-actions/cangulo.build.zip
           git commit -m "updated gh-actions/cangulo.build.zip"
           git push
