@@ -9,6 +9,7 @@ using Nuke.Common.IO;
 using Nuke.Common.Tools.DotNet;
 using Octokit;
 using System;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -35,7 +36,7 @@ namespace cangulo.build.Application.RequestHandlers
                                     new
                                     {
                                         path = x.ToString(),
-                                        fileName = x.GetFileName()
+                                        fileName = Path.GetFileName(x.GetFileName())
                                     });
 
 

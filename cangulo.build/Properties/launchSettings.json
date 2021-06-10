@@ -2,7 +2,7 @@
   "profiles": {
     "_build": {
       "commandName": "Project",
-      "commandLineArgs": "--target GenericRequestHandler --requestJSON \"{ \\\"requestModel\\\":\\\"PushNugetPackages\\\",\\\"originator\\\":\\\"originator\\\",\\\"nugetPackagesLocation\\\":\\\"artifacts\\\", \\\"targetNugetRepository\\\":\\\"test\\\", \\\"commentToPrRequest\\\":{ \\\"pullRequestNumber\\\":3, \\\"repositoryId\\\":330426518 }}\" --verbosity verbose --root .",
+      "commandLineArgs": "--target GenericRequestHandler --requestJSON \"{ \\\"requestModel\\\":\\\"PushNugetPackages\\\",\\\"originator\\\":\\\"originator\\\",\\\"nugetPackagesLocation\\\":\\\"artifacts\\\", \\\"targetNugetRepository\\\":\\\"test\\\", \\\"commentToPrRequest\\\":{ \\\"pullRequestNumber\\\":3, \\\"repositoryId\\\":330426518 }}\" --verbosity verbose --root ..\\..\\..",
       "environmentVariables": {
         //"GITHUB_TOKEN": "ASASDASD"
         //"OUTPUT_FILE_PATH": "./artifacts"
