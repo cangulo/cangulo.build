@@ -13,6 +13,11 @@ jobs:
       - uses: actions/checkout@v2
       - name: Publish cangulo.build
         run: dotnet publish ./cangulo.build/cangulo.build.csproj  -o ./artifacts/cangulo.build/ -r linux-x64 --self-contained
+      - name: zip cangulo.build
+        run: |
+          cd ./artifacts
+          zip -r cangulo.build.zip .
+          cd ..
       - uses: actions/upload-artifact@v2
         with:
           name: cangulo.build
@@ -31,4 +36,6 @@ jobs:
         with:
           name: cangulo.build
       - name: List Files
-        run: ls -la
+        run: |
+          ls -la
+          git status
