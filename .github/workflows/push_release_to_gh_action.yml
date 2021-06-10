@@ -11,14 +11,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Publish cangulo.build
-      - uses: actions/upload-artifact@v2
-        with:
-          name: cangulo.build
-          path: ./artifacts/cangulo.build.zip
-      - uses: actions/upload-artifact@v2
-        with:
-          name: cangulo.build
-          path: ./artifacts/cangulo.build/
       - uses: actions/checkout@v2
         run: dotnet publish ./cangulo.build/cangulo.build.csproj  -o ./artifacts/canbulo.build/ -r linux-x64 --self-contained
       - name: Ziping artifact
