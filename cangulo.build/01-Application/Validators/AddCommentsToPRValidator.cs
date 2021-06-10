@@ -14,7 +14,7 @@ namespace cangulo.build.Application.Validators
             RuleFor(x => x.RepositoryId)
                 .NotNull()
                 .GreaterThan(0);
-            RuleFor(x => GetModifiedProjectsInPR.EnvVarsRequired)
+            RuleFor(x => AddCommentsToPR.EnvVarsRequired)
                 .NotNull()
                 .ForEach(x => x.ValidateEnvVarIsProvided());
         }
