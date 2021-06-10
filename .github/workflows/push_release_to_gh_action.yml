@@ -30,6 +30,7 @@ jobs:
       - uses: actions/checkout@v2
         with:
           repository: cangulo/cangulo.build-gh-action
+          token: ${{ secrets.ALLOWCOMMITPAT }}
       - name: List Files
         run: ls -la
       - uses: actions/download-artifact@v2
