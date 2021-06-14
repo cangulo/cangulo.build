@@ -1,13 +1,18 @@
-- [PR Model](#pr-model)
-- [Main Workflow](#main-workflow)
-- [Validations in Nuke](#validations-in-nuke)
-- [Steps detail](#steps-detail)
-  - [1. Execute all UT](#1-execute-all-ut)
-  - [2. Detect Projects Changed](#2-detect-projects-changed)
-  - [3. Create Prerelease Nuget Packages](#3-create-prerelease-nuget-packages)
-  - [4. Push Nuget Packages](#4-push-nuget-packages)
+## Git Flow
+https://danielkummer.github.io/git-flow-cheatsheet/index.es_ES.html
+https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow
 
+## GitVersion
+https://gitversion.net/docs/
 
+# How to take advantage of GitFlow and GitVersion at the same time ?
+
+# Experience to learn
+
+- [ ] How to use Git Flow?
+- [ ] How to use GitVersion
+
+## Knowledge learn
 # Notes about git versioning
 
 1. How does git versioning works?
@@ -25,6 +30,9 @@
   * Do commits
   * read tags
 
+# Tags
+
+https://docs.github.com/en/rest/reference/git#create-a-tag-object
 
 # Links to check
 

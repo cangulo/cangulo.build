@@ -10,8 +10,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="02-Domain\**" />
     <Compile Remove="Build.Parameters\**" />
+    <EmbeddedResource Remove="02-Domain\**" />
     <EmbeddedResource Remove="Build.Parameters\**" />
+    <None Remove="02-Domain\**" />
     <None Remove="Build.Parameters\**" />
   </ItemGroup>
 
@@ -28,7 +31,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="02-Domain\Services\" />
     <Folder Include="Abstractions\Logger\" />
   </ItemGroup>
 
