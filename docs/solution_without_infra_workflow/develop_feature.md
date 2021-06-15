@@ -22,6 +22,7 @@ Repeat CI steps
 git flow feature start FEATURE_NAME
 
 **output:**
+```shell
 Switched to a new branch 'feature/FEATURE_NAME'
 
 Summary of actions:
@@ -31,6 +32,7 @@ Summary of actions:
 Now, start committing on your feature. When done, use:
 
      git flow feature finish FEATURE_NAME
+```
 
 2. [User] Create some commits
 3. [User] Push the branch
@@ -49,6 +51,7 @@ The branch is deleted after the PR is merged:
 `git flow feature finish FEATURE_NAME`
 
 **output:**
+```shell
 Switched to branch 'dev'
 Your branch is up to date with 'origin/dev'.
 Already up to date.
@@ -58,5 +61,6 @@ Summary of actions:
 - The feature branch 'feature/FEATURE_NAME' was merged into 'dev'
 - Feature branch 'feature/FEATURE_NAME' has been locally deleted
 - You are now on branch 'dev'
+```
 
 9. [CI] Create nuget packages for `dev`
