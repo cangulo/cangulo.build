@@ -51,7 +51,8 @@ namespace cangulo.build.Application.RequestHandlers
                 $"\nRepository: {pr.Head.Repository.Name}" +
                 $"\nsourceBranch: {pr.Head.Ref}" +
                 $"\ntargetBranch: {pr.Base.Ref}" +
-                $"\ntitle:{pr.Title}");
+                $"\ntitle:{pr.Title}" +
+                $"\nid: {pr.Id}");
 
             return Result.Ok(pr.Id.ToString());
         }
