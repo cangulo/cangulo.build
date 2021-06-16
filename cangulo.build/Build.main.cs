@@ -60,11 +60,10 @@ namespace cangulo.Build
             {
                 var result = resultDynamic as Result;
 
-                ControlFlow.Assert(result.IsFailed, $"Errors handling the request {Request.RequestModel}.Body:" +
+                ControlFlow.Assert(result.IsSuccess, $"Errors handling the request {Request.RequestModel}.Body:" +
                         $"\n{RequestJSON}" +
                         $"\nFound the next errors:" +
                         $"\n{string.Join("\t", result.Errors.Select(x => x.Message).ToArray())}");
-
 
                 Logger.Info($"Success handling {requestType.Name}");
             }
