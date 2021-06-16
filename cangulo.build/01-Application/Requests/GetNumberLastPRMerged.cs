@@ -2,7 +2,7 @@
 
 namespace cangulo.build.Application.Requests
 {
-    public class GetLastPRMergedId : CLIRequest<int>
+    public class GetNumberLastPRMerged : CLIRequest<int>
     {
         public long RepositoryId { get; set; }
         public string TargetBranch { get; set; }

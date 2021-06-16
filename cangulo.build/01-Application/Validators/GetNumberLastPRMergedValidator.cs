@@ -4,9 +4,9 @@ using FluentValidation;
 
 namespace cangulo.build.Application.Validators
 {
-    public class GetLastPRMergedIdValidator : AbstractValidator<GetLastPRMergedId>
+    public class GetNumberLastPRMergedValidator : AbstractValidator<GetNumberLastPRMerged>
     {
-        public GetLastPRMergedIdValidator()
+        public GetNumberLastPRMergedValidator()
         {
             RuleFor(x => x.RepositoryId)
                 .NotNull()

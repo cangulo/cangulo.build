@@ -9,6 +9,6 @@
         ExecuteAllUnitTestsInTheRepository,
         PackAllProjectsInTheRepository,
         GetModifiedProjectsInPR,
-        GetLastPRMergedId
+        GetNumberLastPRMerged
     }
 }
