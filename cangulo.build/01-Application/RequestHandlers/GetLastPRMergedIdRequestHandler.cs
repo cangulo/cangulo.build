@@ -12,18 +12,16 @@ using System.Threading.Tasks;
 
 namespace cangulo.build.Application.RequestHandlers
 {
-    public class GetLastPRMergedIdRequestHandler : ICLIRequestHandler<GetLastPRMergedId, string>
+    public class GetLastPRMergedIdRequestHandler : ICLIRequestHandler<GetLastPRMergedId, int>
     {
         private readonly INukeLogger _nukeLogger;
-        private readonly BuildContext _buildContext;
 
-        public GetLastPRMergedIdRequestHandler(INukeLogger nukeLogger, BuildContext buildContext)
+        public GetLastPRMergedIdRequestHandler(INukeLogger nukeLogger)
         {
             _nukeLogger = nukeLogger ?? throw new ArgumentNullException(nameof(nukeLogger));
-            _buildContext = buildContext ?? throw new ArgumentNullException(nameof(buildContext));
         }
 
-        public async Task<Result<string>> Handle(GetLastPRMergedId request, CancellationToken cancellationToken)
+        public async Task<Result<int>> Handle(GetLastPRMergedId request, CancellationToken cancellationToken)
         {
             var githubToken = EnvironmentInfo.GetVariable<string>(EnvVar.GITHUB_TOKEN.ToString());
 
@@ -54,7 +52,7 @@ namespace cangulo.build.Application.RequestHandlers
                 $"\ntitle:{pr.Title}" +
                 $"\nid: {pr.Id}");
 
-            return Result.Ok(pr.Id.ToString());
+            return Result.Ok((int)pr.Id);
         }
     }
 }
