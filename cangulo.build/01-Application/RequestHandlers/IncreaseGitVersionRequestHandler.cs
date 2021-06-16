@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace cangulo.build._01_Application.RequestHandlers
 {
-    public class IncreaseGitVersionRequestHandler
-    {
-        public IncreaseGitVersionRequestHandler()
-        {
-            ToolResolver
-        }
-    }
+    //public class IncreaseGitVersionRequestHandler
+    //{
+    //    public IncreaseGitVersionRequestHandler()
+    //    {
+    //        ToolResolver
+    //    }
+    //}
 }

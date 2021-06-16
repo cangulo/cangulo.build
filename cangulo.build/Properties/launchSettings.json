@@ -2,10 +2,10 @@
   "profiles": {
     "_build": {
       "commandName": "Project",
-      "commandLineArgs": "--target GenericRequestHandler --requestJSON \"{ \\\"requestModel\\\":\\\"PushNugetPackages\\\",\\\"originator\\\":\\\"originator\\\",\\\"nugetPackagesLocation\\\":\\\"artifacts\\\", \\\"targetNugetRepository\\\":\\\"test\\\", \\\"commentToPrRequest\\\":{ \\\"pullRequestNumber\\\":3, \\\"repositoryId\\\":330426518 }}\" --verbosity verbose --root ..\\..\\..",
+      "commandLineArgs": "--target GenericRequestHandler --requestJSON  \"{ \\\"requestModel\\\":\\\"GetLastPRMergedId\\\", \\\"originator\\\":\\\"originator\\\", \\\"RepositoryId\\\":330426518 , \\\"targetBranch\\\":\\\"master\\\" }\" --verbosity verbose --root ..\\..\\..",
       "environmentVariables": {
-        //"GITHUB_TOKEN": "ASASDASD"
-        //"OUTPUT_FILE_PATH": "./artifacts"
+        // "GITHUB_TOKEN": "",
+        // "OUTPUT_FILE_PATH": "./artifacts"
       },
       "requestTemplates": {
         "PackProjects": "   \"{ \\\"requestModel\\\":\\\"PackProjects\\\",\\\"originator\\\":\\\"originator\\\",\\\"creationMode\\\":\\\"Prerelease\\\", \\\"projects\\\": [\\\"cangulo.build.abstractions\\\"], \\\"outputFolder\\\":\\\"artifacts\\\",\\\"branch\\\":\\\"test\\\" }\"    ",
@@ -14,7 +14,8 @@
         "ExecuteUnitTests": "    \"{ \\\"requestModel\\\":\\\"ExecuteUnitTests\\\" ,\\\"originator\\\":\\\"originator\\\", \\\"solutions\\\": [\\\"cangulo.build\\\"]}\"   ",
         "ExecuteAllUnitTestsInTheRepository": "    \"{ \\\"requestModel\\\":\\\"ExecuteAllUnitTestsInTheRepository\\\",\\\"originator\\\":\\\"originator\\\" }\"    ",
         "PackAllProjectsInTheRepository": "    \"{ \\\"requestModel\\\":\\\"PackAllProjectsInTheRepository\\\",\\\"originator\\\":\\\"originator\\\",\\\"creationMode\\\":\\\"Prerelease\\\", \\\"outputFolder\\\":\\\"artifacts\\\",\\\"branch\\\":\\\"test\\\" }\"    ",
-        "GetModifiedProjectsInPR": "    \"{ \\\"requestModel\\\":\\\"GetModifiedProjectsInPR\\\",\\\"originator\\\":\\\"originator\\\", \\\"pullRequestNumber\\\":3, \\\"RepositoryId\\\":330426518 }\"    "
+        "GetModifiedProjectsInPR": "    \"{ \\\"requestModel\\\":\\\"GetModifiedProjectsInPR\\\",\\\"originator\\\":\\\"originator\\\", \\\"pullRequestNumber\\\":3, \\\"RepositoryId\\\":330426518 }\"    ",
+        "GetLastPRMergedId": "    \"{ \\\"requestModel\\\":\\\"GetLastPRMergedId\\\", \\\"originator\\\":\\\"originator\\\", \\\"RepositoryId\\\":330426518 , \\\"targetBranch\\\":\\\"master\\\" }\"    "
       }
     }
   }

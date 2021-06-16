@@ -8,7 +8,7 @@ namespace cangulo.build.Application.RequestHandlers
     {
     }
 
-    public interface ICLIRequestHandlerWithOutput<in T> : IRequestHandler<T, Result<object>> where T : CLIRequestWithOutput
+    public interface ICLIRequestHandler<in T, Z> : IRequestHandler<T, Result<Z>> where T : CLIRequest<Z>
     {
     }
 }

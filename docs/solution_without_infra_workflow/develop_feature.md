@@ -19,7 +19,7 @@ Repeat CI steps
 
 **command:**
 
-git flow feature start FEATURE_NAME
+`git flow feature start FEATURE_NAME`
 
 **output:**
 ```shell

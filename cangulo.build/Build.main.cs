@@ -59,26 +59,27 @@ namespace cangulo.Build
             if (resultDynamic is Result)
             {
                 var result = resultDynamic as Result;
-                if (result.IsFailed)
-                {
-                    result.Errors.ForEach(x => Logger.Error(x.Message));
-                    ControlFlow.Assert(result.IsSuccess, $"Errors handling the request {Request.RequestModel}:\n");
-                }
 
-                ControlFlow.Assert(result.IsSuccess, $"Found errors handling the request:\n{RequestJSON}");
+                ControlFlow.Assert(result.IsFailed, $"Errors handling the request {Request.RequestModel}.Body:" +
+                        $"\n{RequestJSON}" +
+                        $"\nFound the next errors:" +
+                        $"\n{string.Join("\t", result.Errors.Select(x => x.Message).ToArray())}");
+
+
                 Logger.Info($"Success handling {requestType.Name}");
             }
-            else if (resultDynamic is Result<object>)
+            else if (resultDynamic is ResultBase)
             {
-                var result = resultDynamic as Result<object>;
 
-                if (result.IsFailed)
-                {
-                    result.Errors.ForEach(x => Logger.Error(x.Message));
-                    ControlFlow.Assert(result.IsSuccess, $"Errors handling the request {Request.RequestModel}:\n");
-                }
+                var result = resultDynamic as ResultBase;
+                ControlFlow.Assert(result.IsSuccess, $"Errors handling the request {Request.RequestModel}.Body:" +
+                        $"\n{RequestJSON}" +
+                        $"\nFound the next errors:" +
+                        $"\n\r\t{string.Join("\n\r\t", result.Errors.Select(x => x.ToString()).ToArray())}");
 
-                var output = result.Value ?? throw new ArgumentNullException($"result after handling request is null");
+                var output = result.GetType().GetProperty("Value").GetValue(result, null) ?? throw new ArgumentNullException($"result after handling request is null"); ;
+                var outputType = output.GetType();
+
 
                 var outputFolder = EnvironmentInfo.GetVariable<string>(EnvVar.OUTPUT_FILE_PATH.ToString());
                 if (string.IsNullOrEmpty(outputFolder))
@@ -91,12 +92,11 @@ namespace cangulo.Build
                 var fileAbsolutePath = outputFolderAbsolutePath / outputFilename;
 
                 using FileStream createStream = File.Create(fileAbsolutePath);
-                await JsonSerializer.SerializeAsync(createStream, output, new JsonSerializerOptions
+                await JsonSerializer.SerializeAsync(createStream, output, outputType, new JsonSerializerOptions
                 {
                     WriteIndented = true
                 });
 
-                ControlFlow.Assert(result.IsSuccess, $"Found errors handling the request:\n{RequestJSON}");
                 Logger.Info($"Success handling {requestType.Name} output saved in the file {outputFilename} at {outputFolder}");
             };
         }
