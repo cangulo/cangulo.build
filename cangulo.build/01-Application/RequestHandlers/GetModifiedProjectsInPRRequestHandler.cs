@@ -14,7 +14,7 @@ using static cangulo.build.Abstractions.Constants;
 
 namespace cangulo.build.Application.RequestHandlers
 {
-    public class GetModifiedProjectsInPRRequestHandler : ICLIRequestHandlerWithOutput<GetModifiedProjectsInPR>
+    public class GetModifiedProjectsInPRRequestHandler : ICLIRequestHandler<GetModifiedProjectsInPR, string[]>
     {
         private readonly INukeLogger _nukeLogger;
         private readonly BuildContext _buildContext;
@@ -25,7 +25,7 @@ namespace cangulo.build.Application.RequestHandlers
             _buildContext = buildContext ?? throw new ArgumentNullException(nameof(buildContext));
         }
 
-        public async Task<Result<object>> Handle(GetModifiedProjectsInPR request, CancellationToken cancellationToken)
+        public async Task<Result<string[]>> Handle(GetModifiedProjectsInPR request, CancellationToken cancellationToken)
         {
             var githubToken = EnvironmentInfo.GetVariable<string>(EnvVar.GITHUB_TOKEN.ToString());
 
@@ -38,9 +38,6 @@ namespace cangulo.build.Application.RequestHandlers
             var filesPR = await client.PullRequest.Files(request.RepositoryId, pr.Number);
             var filesModified = filesPR.Where(x => x.Status != "removed").Select(x => x.FileName);
 
-            //_nukeLogger.Info($"Files Modified:\n");
-            //filesModified.ToList().ForEach(x => _nukeLogger.Trace(x));
-
             var projectsPackagable = _buildContext.Projects.Where(x => x.GetProperty<string>(CSProjProperties.VERSION_PREFIX) != null);
 
             _nukeLogger.Info($"Projects Modified:\n");
@@ -48,9 +45,9 @@ namespace cangulo.build.Application.RequestHandlers
             projectsModified.ToList().ForEach(x => _nukeLogger.Info(x));
 
             if (!projectsModified.Any())
-                _nukeLogger.Info($"No project have been modified:\n");
+                _nukeLogger.Warn($"No project have been modified!");
 
-            return Result.Ok<object>(projectsModified.ToArray());
+            return Result.Ok(projectsModified.ToArray());
         }
     }
 }

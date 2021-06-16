@@ -2,10 +2,10 @@
 
 namespace cangulo.build.Application.Requests
 {
-    public class GetModifiedProjectsInPR : CLIRequest<string[]>
+    public class GetLastPRMergedId : CLIRequest<string>
     {
-        public int PullRequestNumber { get; set; }
         public long RepositoryId { get; set; }
+        public string TargetBranch { get; set; }
         public static new EnvVar[] EnvVarsRequired = new EnvVar[] { EnvVar.GITHUB_TOKEN, EnvVar.OUTPUT_FILE_PATH };
     }
 }

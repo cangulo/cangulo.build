@@ -8,6 +8,7 @@
         PushNugetPackages,
         ExecuteAllUnitTestsInTheRepository,
         PackAllProjectsInTheRepository,
-        GetModifiedProjectsInPR
+        GetModifiedProjectsInPR,
+        GetLastPRMergedId
     }
 }

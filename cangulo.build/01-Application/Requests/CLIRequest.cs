@@ -6,7 +6,7 @@ namespace cangulo.build.Application.Requests
 {
     public class CLIRequest : BaseCLIRequest, IRequest<Result> { }
 
-    public class CLIRequestWithOutput : BaseCLIRequest, IRequest<Result<object>> { }
+    public class CLIRequest<T> : BaseCLIRequest, IRequest<Result<T>> { }
 
     public class BaseCLIRequest
     {
