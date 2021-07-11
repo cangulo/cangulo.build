@@ -1,6 +1,7 @@
 ﻿using cangulo.Build;
 using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
+using Nuke.Common.Tools.GitVersion;
 using System.Collections.Generic;
 
 namespace cangulo.build.Abstractions.Models

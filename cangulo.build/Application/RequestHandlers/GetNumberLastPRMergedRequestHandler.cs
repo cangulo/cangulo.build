@@ -1,5 +1,4 @@
-﻿using cangulo.build.Abstractions.Models;
-using cangulo.build.Abstractions.NukeLogger;
+﻿using cangulo.build.Abstractions.NukeLogger;
 using cangulo.build.Application.Requests;
 using cangulo.build.Application.Requests.Enums;
 using FluentResults;

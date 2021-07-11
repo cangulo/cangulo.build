@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using static cangulo.build.Abstractions.Constants;
+using static cangulo.build.abstractions.Constants;
 
 namespace cangulo.build.Application.RequestHandlers
 {
@@ -54,6 +54,7 @@ namespace cangulo.build.Application.RequestHandlers
 
         private static IEnumerable<Project> PackableProjects(Solution x)
             => x.AllProjects.Where(ProjectIsPackable());
+
         private static Func<Project, bool> ProjectIsPackable() => x =>
         {
             var result = true;

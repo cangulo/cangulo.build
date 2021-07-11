@@ -10,7 +10,7 @@ using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using static cangulo.build.Abstractions.Constants;
+using static cangulo.build.abstractions.Constants;
 
 namespace cangulo.build.Application.RequestHandlers
 {

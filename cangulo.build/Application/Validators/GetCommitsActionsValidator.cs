@@ -4,9 +4,9 @@ using FluentValidation;
 
 namespace cangulo.build.Application.Validators
 {
-    public class AddCommentsToPRValidator : AbstractValidator<AddCommentsToPR>
+    public class GetCommitsActionsValidator : AbstractValidator<GetCommitsActions>
     {
-        public AddCommentsToPRValidator()
+        public GetCommitsActionsValidator()
         {
             RuleFor(x => x.PullRequestNumber)
                 .NotNull()
@@ -14,10 +14,9 @@ namespace cangulo.build.Application.Validators
             RuleFor(x => x.RepositoryId)
                 .NotNull()
                 .GreaterThan(0);
-            RuleFor(x => AddCommentsToPR.EnvVarsRequired)
+            RuleFor(x => GetCommitsActions.EnvVarsRequired)
                 .NotNull()
                 .ForEach(x => x.ValidateEnvVarIsProvided());
         }
     }
-
 }

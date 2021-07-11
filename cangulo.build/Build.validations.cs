@@ -6,7 +6,7 @@ using Nuke.Common;
 using System;
 using System.Linq;
 using System.Text.Json;
-using System.Text.Json.Serialization;
+using static cangulo.build.Models.ApplicationLayerConstants;
 
 namespace cangulo.Build
 {
@@ -16,15 +16,9 @@ namespace cangulo.Build
         {
             Logger.Info($"RequestJSON received:\n{RequestJSON}");
 
-            JsonSerializerOptions options = new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true,
-                Converters = { new JsonStringEnumConverter(JsonNamingPolicy.CamelCase) }
-            };
-
             try
             {
-                var baseRequest = JsonSerializer.Deserialize<BaseCLIRequest>(RequestJSON, options);
+                var baseRequest = JsonSerializer.Deserialize<BaseCLIRequest>(RequestJSON, SerializerContants.DESERIALIZER_OPTIONS);
 
                 var baseValidationResult = (new BaseCLIRequestValidator()).Validate(baseRequest);
                 if (!baseValidationResult.IsValid)
@@ -34,9 +28,16 @@ namespace cangulo.Build
                     return false;
                 }
 
+
                 var requestType = Type.GetType($"cangulo.build.Application.Requests.{baseRequest.RequestModel}");
-                var request = JsonSerializer.Deserialize(RequestJSON, requestType, options);
-                Logger.Info($"Request Mapped {requestType.Name}");
+                if (requestType is null)
+                {
+                    Logger.Error($"request provided is not supported");
+                    return false;
+                }
+
+                var request = JsonSerializer.Deserialize(RequestJSON, requestType, SerializerContants.DESERIALIZER_OPTIONS);
+                Logger.Trace($"Request Mapped {JsonSerializer.Serialize(request, SerializerContants.SERIALIZER_OPTIONS)}");
 
                 var validatorType = typeof(AbstractValidator<>);
                 validatorType = validatorType.MakeGenericType(new Type[] { requestType });
@@ -70,11 +71,6 @@ namespace cangulo.Build
                 Logger.Error("Error Parsing the request \n", ex);
                 throw;
             }
-        }
-
-        private bool AwsProfileSetup()
-        {
-            return "ASDASD" == "ASDASD";
         }
     }
 }
