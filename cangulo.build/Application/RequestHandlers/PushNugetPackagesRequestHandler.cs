@@ -39,8 +39,6 @@ namespace cangulo.build.Application.RequestHandlers
                                         fileName = Path.GetFileName(x.GetFileName())
                                     });
 
-
-
             foreach (var nuget in nuggets)
             {
                 var publishSettings = new DotNetNuGetPushSettings()

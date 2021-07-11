@@ -1,5 +1,6 @@
 using cangulo.build.Application.Requests;
 using Nuke.Common;
+using Nuke.Common.Tools.GitVersion;
 
 namespace cangulo.Build
 {

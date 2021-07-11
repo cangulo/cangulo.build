@@ -9,6 +9,9 @@
         ExecuteAllUnitTestsInTheRepository,
         PackAllProjectsInTheRepository,
         GetModifiedProjectsInPR,
-        GetNumberLastPRMerged
+        GetNumberLastPRMerged,
+        GetCommitsActions,
+        ProcessCommitActions,
+        CreateRelease
     }
 }

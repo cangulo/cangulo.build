@@ -1,7 +1,6 @@
 using cangulo.build.Abstractions.Models;
 using cangulo.build.Application.Requests.Enums;
 using FluentResults;
-using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Nuke.Common;
@@ -12,6 +11,7 @@ using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
+using static cangulo.build.Models.ApplicationLayerConstants;
 
 namespace cangulo.Build
 {
@@ -21,6 +21,7 @@ namespace cangulo.Build
 
         private readonly IServiceProvider _serviceProvider;
         private readonly IMediator _mediator;
+
 
         public Build()
         {
@@ -33,15 +34,12 @@ namespace cangulo.Build
             else
                 Logger.Info($"No solution Found");
 
-
             var buildContext = new BuildContext
             {
                 RootDirectory = RootDirectory,
                 Solutions = solutions,
                 Projects = solutions.SelectMany(x => x.AllProjects).Distinct()
             };
-
-            var requestJson = RequestJSON;
 
             _serviceProvider = Startup.RegisterServices(buildContext);
             _mediator = _serviceProvider.GetRequiredService<IMediator>();
@@ -69,7 +67,6 @@ namespace cangulo.Build
             }
             else if (resultDynamic is ResultBase)
             {
-
                 var result = resultDynamic as ResultBase;
                 ControlFlow.Assert(result.IsSuccess, $"Errors handling the request {Request.RequestModel}.Body:" +
                         $"\n{RequestJSON}" +
@@ -79,11 +76,9 @@ namespace cangulo.Build
                 var output = result.GetType().GetProperty("Value").GetValue(result, null) ?? throw new ArgumentNullException($"result after handling request is null"); ;
                 var outputType = output.GetType();
 
-
                 var outputFolder = EnvironmentInfo.GetVariable<string>(EnvVar.OUTPUT_FILE_PATH.ToString());
                 if (string.IsNullOrEmpty(outputFolder))
                     throw new ArgumentNullException($"no output folder provided");
-
 
                 var outputFilename = $"{Request.RequestModel}_RESPONSE.json";
                 var outputFolderAbsolutePath = RootDirectory / outputFolder;
@@ -91,19 +86,16 @@ namespace cangulo.Build
                 var fileAbsolutePath = outputFolderAbsolutePath / outputFilename;
 
                 using FileStream createStream = File.Create(fileAbsolutePath);
-                await JsonSerializer.SerializeAsync(createStream, output, outputType, new JsonSerializerOptions
-                {
-                    WriteIndented = true
-                });
+                await JsonSerializer.SerializeAsync(createStream, output, outputType, SerializerContants.SERIALIZER_OPTIONS);
 
                 Logger.Info($"Success handling {requestType.Name} output saved in the file {outputFilename} at {outputFolder}");
             };
         }
 
-        Target TestReadVariables => _ => _
-            .Executes(() =>
-            {
-                EnvironmentInfo.Variables.ToList().ForEach(x => Logger.Info($"{x.Key}:{x.Value}"));
-            });
+        private Target TestReadVariables => _ => _
+             .Executes(() =>
+             {
+                 EnvironmentInfo.Variables.ToList().ForEach(x => Logger.Info($"{x.Key}:{x.Value}"));
+             });
     }
 }

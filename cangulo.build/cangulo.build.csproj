@@ -7,14 +7,18 @@
     <NoWarn>CS0649;CS0169</NoWarn>
     <NukeRootDirectory>..</NukeRootDirectory>
     <NukeScriptDirectory>..</NukeScriptDirectory>
+    <NukeTelemetryVersion>1</NukeTelemetryVersion>
   </PropertyGroup>
 
   <ItemGroup>
     <Compile Remove="02-Domain\**" />
+    <Compile Remove="Abstractions\Logger\**" />
     <Compile Remove="Build.Parameters\**" />
     <EmbeddedResource Remove="02-Domain\**" />
+    <EmbeddedResource Remove="Abstractions\Logger\**" />
     <EmbeddedResource Remove="Build.Parameters\**" />
     <None Remove="02-Domain\**" />
+    <None Remove="Abstractions\Logger\**" />
     <None Remove="Build.Parameters\**" />
   </ItemGroup>
 
@@ -26,12 +30,13 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.1" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="5.0.0" />
-    <PackageReference Include="Nuke.Common" Version="5.1.2" />
+    <PackageReference Include="Nuke.Common" Version="5.2.1" />
     <PackageReference Include="Scrutor" Version="3.3.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Abstractions\Logger\" />
+    <ProjectReference Include="..\cangulo.build.abstractions\cangulo.build.abstractions.csproj" />
+    <ProjectReference Include="..\cangulo.build.domain\cangulo.build.domain.csproj" />
   </ItemGroup>
 
 </Project>
