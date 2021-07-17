@@ -17,12 +17,12 @@ jobs:
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      - name: Packing cangulo.build for linux-x64
-        run: dotnet publish ./cangulo.build/cangulo.build.csproj  -o ./artifacts/cangulo.build/ -r linux-x64 --self-contained
-      - name: zipping cangulo.build
-        run: |
-          mkdir releaseFiles
-          zip -j -r ./releaseFiles/cangulo.build_linux64.zip ./artifacts/cangulo.build/
+      # - name: Packing cangulo.build for linux-x64
+      #   run: dotnet publish ./cangulo.build/cangulo.build.csproj  -o ./artifacts/cangulo.build/ -r linux-x64 --self-contained
+      # - name: zipping cangulo.build
+      #   run: |
+      #     mkdir releaseFiles
+      #     zip -j -r ./releaseFiles/cangulo.build_linux64.zip ./artifacts/cangulo.build/
       - name: Get Current Release Number
         id: get-release-number
         run: echo ::set-output name=RELEASE_NUMBER::$(git tag --sort=committerdate | tail -1)
