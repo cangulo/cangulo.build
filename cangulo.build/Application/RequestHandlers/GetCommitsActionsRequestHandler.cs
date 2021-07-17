@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace cangulo.build.Application.RequestHandlers
 {
-    public class GetCommitsActionsRequestHandler : ICLIRequestHandler<GetCommitsActions, IEnumerable<CommitAction>>
+    public class GetCommitsActionsRequestHandler : ICLIRequestHandler<GetCommitsActions, IEnumerable<CommitActionEnum>>
     {
         private readonly ICommitMessageService _commitMessageService;
         private readonly INukeLogger _nukeLogger;
@@ -25,7 +25,7 @@ namespace cangulo.build.Application.RequestHandlers
             _nukeLogger = nukeLogger ?? throw new ArgumentNullException(nameof(nukeLogger));
         }
 
-        public async Task<Result<IEnumerable<CommitAction>>> Handle(GetCommitsActions request, CancellationToken cancellationToken)
+        public async Task<Result<IEnumerable<CommitActionEnum>>> Handle(GetCommitsActions request, CancellationToken cancellationToken)
         {
             var githubToken = EnvironmentInfo.GetVariable<string>(EnvVar.GITHUB_TOKEN.ToString());
 
@@ -40,7 +40,7 @@ namespace cangulo.build.Application.RequestHandlers
 
             var actions = _commitMessageService
                 .GetActions(commitMsgs)
-                .Where(x => x != CommitAction.Undefined);
+                .Where(x => x != CommitActionEnum.Undefined);
 
             if (actions.Any())
             {

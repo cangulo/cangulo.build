@@ -5,9 +5,9 @@ using System.Collections.Generic;
 
 namespace cangulo.build.Application.Requests
 {
-    public class ProcessCommitActions : CLIRequest<ProgramVersion>
+    public class ProcessCommitActions : CLIRequest<ReleaseNumber>
     {
-        public IEnumerable<CommitAction> CommitActions { get; set; }
+        public IEnumerable<CommitActionEnum> CommitActions { get; set; }
 
         public static new EnvVar[] EnvVarsRequired =
             new EnvVar[] {

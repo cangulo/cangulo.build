@@ -33,10 +33,10 @@ namespace cangulo.build.Application.RequestHandlers
             ghClient.Credentials = new Credentials(githubToken);
             var client = ghClient.Repository.Release;
 
-
             var newReleaseData = new NewRelease(request.Tag)
             {
-                Name = request.Title
+                Name = request.Title,
+                Body = await File.ReadAllTextAsync(_buildContext.RootDirectory / request.ReleaseNotesFilePath, cancellationToken)
             };
 
             var releaseCreated = await client.Create(request.RepositoryId, newReleaseData);
@@ -51,19 +51,22 @@ namespace cangulo.build.Application.RequestHandlers
             };
             _nukeLogger.Success($"Created release: {JsonSerializer.Serialize(releaseCreatedInfo)}");
 
-            var assetsFiles = (_buildContext.RootDirectory / request.ReleaseAssetsFolder).GlobFiles("**/*");
+            var assetsFiles = (_buildContext.RootDirectory / request.ReleaseAssetsFolder).GlobFiles("**/*.zip");
             foreach (var file in assetsFiles)
             {
                 var fileName = Path.GetFileName(file);
                 _nukeLogger.Info($"uploading file: {fileName}");
 
-                var assetData = new ReleaseAssetUpload
+                using (var fileRaw = File.OpenRead(file))
                 {
-                    FileName = fileName,
-                    RawData = File.OpenRead(file),
-                    ContentType = "application/zip"
-                };
-                await client.UploadAsset(releaseCreated, assetData, cancellationToken);
+                    var assetData = new ReleaseAssetUpload
+                    {
+                        FileName = fileName,
+                        RawData = fileRaw,
+                        ContentType = "application/zip"
+                    };
+                    await client.UploadAsset(releaseCreated, assetData, cancellationToken);
+                }
             }
 
             return Result.Ok();

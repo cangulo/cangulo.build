@@ -7,7 +7,7 @@ namespace cangulo.build.Application.Validators
 {
     public class PackAllProjectsInTheRepositoryValidator : AbstractValidator<PackAllProjectsInTheRepository>
     {
-        public PackAllProjectsInTheRepositoryValidator(BuildContext buildContext)
+        public PackAllProjectsInTheRepositoryValidator()
         {
             RuleFor(x => x.CreationMode)
                 .NotNull()

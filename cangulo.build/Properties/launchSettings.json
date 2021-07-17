@@ -2,7 +2,7 @@
   "profiles": {
     "_build": {
       "commandName": "Project",
-      "commandLineArgs": "--target GenericRequestHandler --requestJSON  \"{\\\"requestModel\\\": \\\"CreateRelease\\\",\\\"originator\\\": \\\"originator\\\",\\\"repositoryId\\\":375019629,\\\"tag\\\":\\\"0.0.2-alpha\\\",\\\"title\\\":\\\"Alpha Version!\\\",\\\"releaseNotesFilePath\\\":\\\"./ReleaseNotes.md\\\",\\\"releaseAssetsFolder\\\":\\\"./releaseFiles\\\"}\" --verbosity verbose --root ..\\..\\..",
+      "commandLineArgs": "--target GenericRequestHandler --requestJSON  \"{\\\"requestModel\\\": \\\"IncreaseReleaseNumber\\\",\\\"originator\\\": \\\"originator\\\",\\\"releaseNumber\\\":\\\"0.0.2-alpha\\\",\\\"IncreaseMode\\\":\\\"Patch\\\"}\" --verbosity verbose --root ..\\..\\..",
       "environmentVariables": {
         // "GITHUB_TOKEN": "",
         // "OUTPUT_FILE_PATH": "./artifacts"
@@ -18,7 +18,8 @@
         "GetLastPRMergedId": "    \"{ \\\"requestModel\\\":\\\"GetNumberLastPRMerged\\\", \\\"originator\\\":\\\"originator\\\", \\\"RepositoryId\\\":330426518 , \\\"targetBranch\\\":\\\"master\\\" }\"    ",
         "GetCommitsActions": "    \"{ \\\"requestModel\\\":\\\"GetCommitsActions\\\", \\\"originator\\\":\\\"originator\\\", \\\"RepositoryId\\\":375019629 , \\\"pullRequestNumber\\\":5 }\"    ",
         "ProcessCommitActions": "    \"{ \\\"requestModel\\\":\\\"ProcessCommitActions\\\", \\\"originator\\\":\\\"originator\\\", \\\"commitActions\\\": [\\\"CreatePatch\\\"] }\"    ",
-        "CreateRelease": "  \"{\\\"requestModel\\\": \\\"CreateRelease\\\",\\\"originator\\\": \\\"originator\\\",\\\"repositoryId\\\":375019629,\\\"tag\\\":\\\"0.0.2-alpha\\\",\\\"title\\\":\\\"Alpha Version!\\\",\\\"releaseNotesFilePath\\\":\\\"./ReleaseNotes.md\\\",\\\"releaseAssetsFolder\\\":\\\"./releaseFiles\\\"}\" "
+        "CreateRelease": "  \"{\\\"requestModel\\\": \\\"CreateRelease\\\",\\\"originator\\\": \\\"originator\\\",\\\"repositoryId\\\":375019629,\\\"tag\\\":\\\"0.0.2-alpha\\\",\\\"title\\\":\\\"Alpha Version!\\\",\\\"releaseNotesFilePath\\\":\\\"./ReleaseNotes.md\\\",\\\"releaseAssetsFolder\\\":\\\"./releaseFiles\\\"}\" ",
+        "IncreaseReleaseNumber": "  \"{\\\"requestModel\\\": \\\"IncreaseReleaseNumber\\\",\\\"originator\\\": \\\"originator\\\",\\\"releaseNumber\\\":\\\"0.0.2-alpha\\\",\\\"IncreaseMode\\\":\\\"Patch\\\"}\" "
       }
     }
   }

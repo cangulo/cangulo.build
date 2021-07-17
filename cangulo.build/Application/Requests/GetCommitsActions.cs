@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace cangulo.build.Application.Requests
 {
-    public class GetCommitsActions : CLIRequest<IEnumerable<CommitAction>>
+    public class GetCommitsActions : CLIRequest<IEnumerable<CommitActionEnum>>
     {
         public int PullRequestNumber { get; set; }
         public long RepositoryId { get; set; }

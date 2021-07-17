@@ -15,7 +15,7 @@ namespace cangulo.build.domain.Extensions
             return services
                 .AddTransient<ICommitMessageService, CommitMessageService>()
                 .AddTransient<ITagsService, TagsService>((provider) => new TagsService(serviceContext.Git))
-                .AddTransient<IVersionService, VersionService>();
+                .AddTransient<IVersionParserService, VersionParserService>();
             //.AddTransient<ICreateReleaseCIProcessor,CreatePatchProcessor>()
             //.AddTransient<ICreateReleaseCIProcessor,CreateMinorProcessor>()
             //.AddTransient<ICreateReleaseCIProcessor, CreateMajorProcessor>();

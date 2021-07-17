@@ -8,11 +8,11 @@ namespace cangulo.build.domain.UT.Services
     public class CommitMessageServiceShould
     {
         [Theory]
-        [InlineData("[CI] create patch", CommitAction.CreatePatch)]
-        [InlineData("[CI] create minor", CommitAction.CreateMinor)]
-        [InlineData("[CI] create major", CommitAction.CreateMajor)]
-        [InlineData("No CI Action Type provided", CommitAction.Undefined)]
-        public void InjectAllValues_For_IntType(string msg, CommitAction expectedActionType)
+        [InlineData("[CI] create patch", CommitActionEnum.CreatePatch)]
+        [InlineData("[CI] create minor", CommitActionEnum.CreateMinor)]
+        [InlineData("[CI] create major", CommitActionEnum.CreateMajor)]
+        [InlineData("No CI Action Type provided", CommitActionEnum.Undefined)]
+        public void InjectAllValues_For_IntType(string msg, CommitActionEnum expectedActionType)
         {
             // Arrange
             // TODO: Inject this as parameter in the method

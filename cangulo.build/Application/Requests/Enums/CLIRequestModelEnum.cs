@@ -12,6 +12,7 @@
         GetNumberLastPRMerged,
         GetCommitsActions,
         ProcessCommitActions,
-        CreateRelease
+        CreateRelease,
+        IncreaseReleaseNumber
     }
 }

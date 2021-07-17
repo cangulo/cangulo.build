@@ -17,14 +17,14 @@ using System.Threading.Tasks;
 
 namespace cangulo.build.Application.RequestHandlers
 {
-    public class ProcessCommitActionsRequestHandler : ICLIRequestHandler<ProcessCommitActions, ProgramVersion>
+    public class ProcessCommitActionsRequestHandler : ICLIRequestHandler<ProcessCommitActions, ReleaseNumber>
     {
         private readonly ITagsService _tagsService;
-        private readonly IVersionService _versionService;
+        private readonly IVersionParserService _versionService;
         private readonly INukeLogger _nukeLogger;
         private readonly GitRepository _gitRepository;
 
-        public ProcessCommitActionsRequestHandler(ITagsService tagsService, IVersionService versionService, INukeLogger nukeLogger, GitRepository gitRepository)
+        public ProcessCommitActionsRequestHandler(ITagsService tagsService, IVersionParserService versionService, INukeLogger nukeLogger, GitRepository gitRepository)
         {
             _tagsService = tagsService ?? throw new ArgumentNullException(nameof(tagsService));
             _versionService = versionService ?? throw new ArgumentNullException(nameof(versionService));
@@ -32,14 +32,14 @@ namespace cangulo.build.Application.RequestHandlers
             _gitRepository = gitRepository ?? throw new ArgumentNullException(nameof(gitRepository));
         }
 
-        public async Task<Result<ProgramVersion>> Handle(ProcessCommitActions request, CancellationToken cancellationToken)
+        public async Task<Result<ReleaseNumber>> Handle(ProcessCommitActions request, CancellationToken cancellationToken)
         {
             var githubToken = EnvironmentInfo.GetVariable<string>(EnvVar.GITHUB_TOKEN.ToString());
 
             var client = new GitHubClient(new ProductHeaderValue(request.Originator));
             client.Credentials = new Credentials(githubToken);
 
-            var actions = request.CommitActions.Where(x => x != CommitAction.Undefined);
+            var actions = request.CommitActions.Where(x => x != CommitActionEnum.Undefined);
             if (actions.Any())
             {
                 // CreateMajor,CreateMinor,CreatePath workflow
@@ -66,21 +66,21 @@ namespace cangulo.build.Application.RequestHandlers
                         return Result.Fail("No last tag defined in the project");
 
                     var currentProgramVersion = _versionService.ParseVersionFromTag(lastTag2);
-                    var nextProgramVersion = new ProgramVersion();
+                    var nextProgramVersion = new ReleaseNumber();
 
                     _nukeLogger.Info($"current program version: {JsonSerializer.Serialize(currentProgramVersion)}");
 
-                    if (request.CommitActions.Any(x => x == CommitAction.CreateMajor))
+                    if (request.CommitActions.Any(x => x == CommitActionEnum.CreateMajor))
                     {
-                        nextProgramVersion = new ProgramVersion { Major = currentProgramVersion.Major + 1, Minor = 0, Patch = 0 };
+                        nextProgramVersion = new ReleaseNumber { Major = currentProgramVersion.Major + 1, Minor = 0, Patch = 0 };
                     }
-                    else if (request.CommitActions.Any(x => x == CommitAction.CreateMinor))
+                    else if (request.CommitActions.Any(x => x == CommitActionEnum.CreateMinor))
                     {
-                        nextProgramVersion = new ProgramVersion { Major = currentProgramVersion.Major, Minor = currentProgramVersion.Minor + 1, Patch = 0 };
+                        nextProgramVersion = new ReleaseNumber { Major = currentProgramVersion.Major, Minor = currentProgramVersion.Minor + 1, Patch = 0 };
                     }
-                    else if (request.CommitActions.Any(x => x == CommitAction.CreatePatch))
+                    else if (request.CommitActions.Any(x => x == CommitActionEnum.CreatePatch))
                     {
-                        nextProgramVersion = new ProgramVersion { Major = currentProgramVersion.Major, Minor = currentProgramVersion.Minor, Patch = currentProgramVersion.Patch + 1 };
+                        nextProgramVersion = new ReleaseNumber { Major = currentProgramVersion.Major, Minor = currentProgramVersion.Minor, Patch = currentProgramVersion.Patch + 1 };
                     }
                     _nukeLogger.Info($"increased program version: {JsonSerializer.Serialize(nextProgramVersion)}");
 
@@ -90,7 +90,7 @@ namespace cangulo.build.Application.RequestHandlers
             else
                 _nukeLogger.Warn("No Action provided");
 
-            return Result.Ok<ProgramVersion>(null);
+            return Result.Ok<ReleaseNumber>(null);
         }
     }
 }

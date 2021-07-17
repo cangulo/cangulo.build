@@ -1,6 +1,6 @@
 ﻿namespace cangulo.build.abstractions.Models.Enums
 {
-    public enum CommitAction
+    public enum CommitActionEnum
     {
         Undefined,
         CreatePatch,
