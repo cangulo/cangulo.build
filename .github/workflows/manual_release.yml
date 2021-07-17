@@ -36,7 +36,7 @@ jobs:
                 \"requestModel\": \"IncreaseReleaseNumber\",
                 \"originator\": \"${{ github.actor }}-${{ github.event_name }}\",
                 \"releaseNumber\": \"${{ steps.get-release-number.outputs.RELEASE_NUMBER }}\",
-                \"increaseMode\": \"${{ github.event.inputs.releaseType }}\",
+                \"increaseMode\": \"${{ github.event.inputs.releaseType }}\"
             }
           END
           )
