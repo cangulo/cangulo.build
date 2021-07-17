@@ -16,61 +16,74 @@ namespace cangulo.Build
         {
             Logger.Info($"RequestJSON received:\n{RequestJSON}");
 
+            BaseCLIRequest baseRequest;
+
             try
             {
-                var baseRequest = JsonSerializer.Deserialize<BaseCLIRequest>(RequestJSON, SerializerContants.DESERIALIZER_OPTIONS);
-
-                var baseValidationResult = (new BaseCLIRequestValidator()).Validate(baseRequest);
-                if (!baseValidationResult.IsValid)
-                {
-                    Logger.Error($"Validation Errors:\n");
-                    baseValidationResult.Errors.ForEach(x => Logger.Error(x.ErrorMessage));
-                    return false;
-                }
-
-
-                var requestType = Type.GetType($"cangulo.build.Application.Requests.{baseRequest.RequestModel}");
-                if (requestType is null)
-                {
-                    Logger.Error($"request provided is not supported");
-                    return false;
-                }
-
-                var request = JsonSerializer.Deserialize(RequestJSON, requestType, SerializerContants.DESERIALIZER_OPTIONS);
-                Logger.Trace($"Request Mapped {JsonSerializer.Serialize(request, SerializerContants.SERIALIZER_OPTIONS)}");
-
-                var validatorType = typeof(AbstractValidator<>);
-                validatorType = validatorType.MakeGenericType(new Type[] { requestType });
-                var validator = _serviceProvider.GetService(validatorType);
-
-                if (validator == null)
-                {
-                    Request = request as BaseCLIRequest;
-                    return true;
-                }
-
-                var validationResult = validator
-                                        .GetType()
-                                        .GetMethods()
-                                        .Single(x => x.Name == "Validate" && x.GetParameters().Single().ParameterType == requestType)
-                                        .Invoke(validator, new object[] { request }) as ValidationResult;
-
-                if (!validationResult.IsValid)
-                {
-                    Logger.Error($"Validation Errors:\n");
-                    validationResult.Errors.ForEach(x => Logger.Error(x.ErrorMessage));
-                }
-                else
-                    Logger.Success("Request is valid");
-
-                Request = request as BaseCLIRequest;
-                return validationResult.IsValid;
+                baseRequest = JsonSerializer.Deserialize<BaseCLIRequest>(RequestJSON, SerializerContants.DESERIALIZER_OPTIONS);
             }
             catch (Exception ex)
             {
-                Logger.Error("Error Parsing the request \n", ex);
+                Logger.Error("Error parsing the request to the model BaseCLIRequest \n", ex);
                 throw;
             }
+
+            var baseValidationResult = (new BaseCLIRequestValidator()).Validate(baseRequest);
+            if (!baseValidationResult.IsValid)
+            {
+                Logger.Error($"Validation Errors:\n");
+                baseValidationResult.Errors.ForEach(x => Logger.Error(x.ErrorMessage));
+                return false;
+            }
+
+
+            var requestType = Type.GetType($"cangulo.build.Application.Requests.{baseRequest.RequestModel}");
+            if (requestType is null)
+            {
+                Logger.Error($"request provided is not supported");
+                return false;
+            }
+
+            object request;
+
+            try
+            {
+                request = JsonSerializer.Deserialize(RequestJSON, requestType, SerializerContants.DESERIALIZER_OPTIONS);
+            }
+            catch (Exception ex)
+            {
+                Logger.Error($"Error parsing the request to the model ${requestType.Name}  \n", ex);
+                throw;
+            }
+
+            Logger.Trace($"Request Mapped {JsonSerializer.Serialize(request, SerializerContants.SERIALIZER_OPTIONS)}");
+
+            var validatorType = typeof(AbstractValidator<>);
+            validatorType = validatorType.MakeGenericType(new Type[] { requestType });
+            var validator = _serviceProvider.GetService(validatorType);
+
+            if (validator == null)
+            {
+                Request = request as BaseCLIRequest;
+                return true;
+            }
+
+            var validationResult = validator
+                                    .GetType()
+                                    .GetMethods()
+                                    .Single(x => x.Name == "Validate" && x.GetParameters().Single().ParameterType == requestType)
+                                    .Invoke(validator, new object[] { request }) as ValidationResult;
+
+            if (!validationResult.IsValid)
+            {
+                Logger.Error($"Validation Errors:\n");
+                validationResult.Errors.ForEach(x => Logger.Error(x.ErrorMessage));
+            }
+            else
+                Logger.Success("Request is valid");
+
+            Request = request as BaseCLIRequest;
+            return validationResult.IsValid;
         }
     }
 }
